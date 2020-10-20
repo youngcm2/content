@@ -493,12 +493,20 @@ def find_tests_and_content_packs_for_modified_files(modified_files, conf=deepcop
 
     tests_set, catched_scripts, catched_playbooks, packs_to_install = collect_changed_ids(
         integration_ids, playbook_names, script_names, modified_files, id_set)
-
+    tools.print_error(f'\n\n\n\n\ntests_set: {tests_set}\n\n\n\n\n')
+    tools.print_error(f'\n\n\n\n\ncatched_scripts: {catched_scripts}\n\n\n\n\n')
+    tools.print_error(f'\n\n\n\n\ncatched_playbooks: {catched_playbooks}\n\n\n\n\n')
     test_ids, missing_ids, caught_missing_test, test_packs_to_install = collect_tests_and_content_packs(
         script_names, playbook_names, integration_ids, catched_scripts, catched_playbooks, tests_set, id_set, conf)
-
+    tools.print_error(f'\n\n\n\n\ntest_ids: {test_ids}\n\n\n\n\n')
+    tools.print_error(f'\n\n\n\n\nmissing_ids: {missing_ids}\n\n\n\n\n')
+    tools.print_error(f'\n\n\n\n\ncaught_missing_test: {caught_missing_test}\n\n\n\n\n')
+    tools.print_error(f'\n\n\n\n\ntest_packs_to_install: {test_packs_to_install}\n\n\n\n\n')
+    tools.print_error(f'\n\n\n\n\npacks to install before update: {packs_to_install}\n\n\n\n\n')
     packs_to_install.update(test_packs_to_install)
+    tools.print_error(f'\n\n\n\n\npacks to install after update: {packs_to_install}\n\n\n\n\n')
 
+    tools.print_error(f'\n\n\n\n\nmodified_files before update_with_tests_sections: {modified_files}\n\n\n\n\n')
     missing_ids = update_with_tests_sections(missing_ids, modified_files, test_ids, tests_set)
 
     missing_ids, tests_set = check_if_fetch_incidents_is_tested(missing_ids, integration_ids, id_set, conf, tests_set)
@@ -519,8 +527,11 @@ def update_with_tests_sections(missing_ids, modified_files, test_ids, tests):
     test_ids.append(RUN_ALL_TESTS_FORMAT)
     # Search for tests section
     for file_path in modified_files:
+        tools.print_error(f'\n\n\n\n\nfile_path currently: {file_path}\n\n\n\n\n')
         tests_from_file = get_tests(file_path)
+        tools.print_error(f'\n\n\n\n\ntests_from_file currently: {file_path}\n\n\n\n\n')
         for test in tests_from_file:
+            tools.print_error(f'\n\n\n\n\ncurrent test: {test}\n\n\n\n\n')
             if test in test_ids or re.match(NO_TESTS_FORMAT, test, re.IGNORECASE):
                 if checked_type(file_path, INTEGRATION_REGEXES):
                     _id = tools.get_script_or_integration_id(file_path)
@@ -1138,6 +1149,8 @@ def get_test_list_and_content_packs_to_install(files_string, branch_name, minimu
     tests = set([])
     packs_to_install = set([])
     if modified_files_with_relevant_tests:
+        tools.print_error(
+            f'\n\n\n\n\nmodified_files_with_relevant_tests: {modified_files_with_relevant_tests}, conf: {conf}, id_set: {id_set}\n\n\n\n\n')
         tests, packs_to_install = find_tests_and_content_packs_for_modified_files(modified_files_with_relevant_tests,
                                                                                   conf, id_set)
     for pack in modified_metadata_list:
@@ -1315,6 +1328,7 @@ def create_test_file(is_nightly, skip_save=False, path_to_pack=''):
 
         tests, packs_to_install = get_test_list_and_content_packs_to_install(files_string, branch_name,
                                                                              minimum_server_version)
+
         tests_string = '\n'.join(tests)
         packs_to_install_string = '\n'.join(packs_to_install)
 
