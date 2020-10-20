@@ -312,6 +312,7 @@ def get_name(file_path):
 def get_tests(file_path):
     """Collect tests mentioned in file_path"""
     data_dictionary = tools.get_yaml(file_path)
+    tools.print_error(f'\n\n\n\n\ndata_dictionary currently: {data_dictionary}\n\n\n\n\n')
     # inject no tests to whitelist so adding values to white list will not force all tests
     if data_dictionary:
         return data_dictionary.get('tests', [])
@@ -529,7 +530,7 @@ def update_with_tests_sections(missing_ids, modified_files, test_ids, tests):
     for file_path in modified_files:
         tools.print_error(f'\n\n\n\n\nfile_path currently: {file_path}\n\n\n\n\n')
         tests_from_file = get_tests(file_path)
-        tools.print_error(f'\n\n\n\n\ntests_from_file currently: {file_path}\n\n\n\n\n')
+        tools.print_error(f'\n\n\n\n\ntests_from_file currently: {tests_from_file}\n\n\n\n\n')
         for test in tests_from_file:
             tools.print_error(f'\n\n\n\n\ncurrent test: {test}\n\n\n\n\n')
             if test in test_ids or re.match(NO_TESTS_FORMAT, test, re.IGNORECASE):
