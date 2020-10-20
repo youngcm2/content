@@ -167,6 +167,7 @@ def update_index_folder(index_folder_path, pack_name, pack_path, pack_version=''
         index_folder_subdirectories = [d for d in os.listdir(index_folder_path) if
                                        os.path.isdir(os.path.join(index_folder_path, d))]
         index_pack_path = os.path.join(index_folder_path, pack_name)
+
         metadata_files_in_index = glob.glob(f"{index_pack_path}/metadata-*.json")
         new_metadata_path = os.path.join(index_pack_path, f"metadata-{pack_version}.json")
 
@@ -743,6 +744,7 @@ def create_and_upload_marketplace_pack(upload_config, pack, storage_bucket, inde
     is_private_build = upload_config.is_private
 
     task_status, user_metadata = pack.load_user_metadata()
+    print_error(f'\n\n\nuser_metadata after load is: {json.dumps(user_metadata, indent=4, sort_keys=True)}\n\n\n')
     if not task_status:
         pack.status = PackStatus.FAILED_LOADING_USER_METADATA.name
         pack.cleanup()

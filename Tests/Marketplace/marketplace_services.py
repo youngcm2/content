@@ -1208,13 +1208,12 @@ class Pack(object):
             return task_status
 
     def set_pack_dependencies(self, user_metadata, packs_dependencies_mapping):
-        print_error(f"pack_name is: {self._pack_name}")
-        print_error(f"packs_dependencies_mapping is: {packs_dependencies_mapping}")
-        print_error(f"first step is: {packs_dependencies_mapping.get(self._pack_name, {})}")
         pack_dependencies = packs_dependencies_mapping.get(self._pack_name, {}).get('dependencies', {})
         if 'dependencies' not in user_metadata:
             user_metadata['dependencies'] = {}
-        print_error(f'after if stmt user_metadata is: {user_metadata} and pack_dependencies is: {pack_dependencies}')
+        print_error(f'\n\n\nSTART user_metadata is: {json.dumps(user_metadata, indent=4, sort_keys=True)}\n\n\n')
+        print_error(
+            f'\n\n\nSTART pack_dependencies is: {json.dumps(pack_dependencies, indent=4, sort_keys=True)}\n\n\n')
         # If it is a core pack, check that no new mandatory packs (that are not core packs) were added
         # They can be overridden in the user metadata to be not mandatory so we need to check there as well
         if self._pack_name in GCPConfig.CORE_PACKS_LIST:
@@ -1225,10 +1224,14 @@ class Pack(object):
             if mandatory_dependencies:
                 raise Exception(f'New mandatory dependencies {mandatory_dependencies} were '
                                 f'found in the core pack {self._pack_name}')
-
+        print_error(f'\n\n\nMIDDLE user_metadata is: {json.dumps(user_metadata, indent=4, sort_keys=True)}\n\n\n')
+        print_error(
+            f'\n\n\nMIDDLE pack_dependencies is: {json.dumps(pack_dependencies, indent=4, sort_keys=True)}\n\n\n')
         pack_dependencies.update(user_metadata['dependencies'])
         user_metadata['dependencies'] = pack_dependencies
-        print_error(f'after set_pack_dependencies user_metadata is: {user_metadata}')
+        print_error(
+            f'\n\n\nEND set_pack_dependencies is: {json.dumps(pack_dependencies, indent=4, sort_keys=True)}\n\n\n')
+        print_error(f'\n\n\nEND user_metadata is: {json.dumps(user_metadata, indent=4, sort_keys=True)}\n\n\n')
 
     def prepare_for_index_upload(self):
         """ Removes and leaves only necessary files in pack folder.
