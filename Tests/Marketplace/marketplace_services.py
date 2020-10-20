@@ -1179,6 +1179,8 @@ class Pack(object):
                                                              user_metadata.get('dependencies', {}),
                                                              user_metadata.get('displayedImages', []))
 
+            print_error(f"dependencies_data is: {dependencies_data}")
+
             if packs_statistic_df is not None:
                 self.downloads_count = self._get_downloads_count(packs_statistic_df)
 
@@ -1194,6 +1196,7 @@ class Pack(object):
                                                            is_feed_pack=self._is_feed)
 
             with open(metadata_path, "w") as metadata_file:
+                print_error(f"formatted metadata is: {formatted_metadata}")
                 json.dump(formatted_metadata, metadata_file, indent=4)  # writing back parsed metadata
 
             print_color(f"Finished formatting {self._pack_name} packs's {Pack.METADATA} {metadata_path} file.",
@@ -1205,10 +1208,13 @@ class Pack(object):
             return task_status
 
     def set_pack_dependencies(self, user_metadata, packs_dependencies_mapping):
+        print_error(f"pack_name is: {self._pack_name}")
+        print_error(f"packs_dependencies_mapping is: {packs_dependencies_mapping}")
+        print_error(f"first step is: {packs_dependencies_mapping.get(self._pack_name, {})}")
         pack_dependencies = packs_dependencies_mapping.get(self._pack_name, {}).get('dependencies', {})
         if 'dependencies' not in user_metadata:
             user_metadata['dependencies'] = {}
-
+        print_error(f'after if stmt user_metadata is: {user_metadata} and pack_dependencies is: {pack_dependencies}')
         # If it is a core pack, check that no new mandatory packs (that are not core packs) were added
         # They can be overridden in the user metadata to be not mandatory so we need to check there as well
         if self._pack_name in GCPConfig.CORE_PACKS_LIST:
@@ -1222,6 +1228,7 @@ class Pack(object):
 
         pack_dependencies.update(user_metadata['dependencies'])
         user_metadata['dependencies'] = pack_dependencies
+        print_error(f'after set_pack_dependencies user_metadata is: {user_metadata}')
 
     def prepare_for_index_upload(self):
         """ Removes and leaves only necessary files in pack folder.

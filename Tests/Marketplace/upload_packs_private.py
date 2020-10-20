@@ -935,6 +935,7 @@ def main():
     build_number = upload_config.ci_build_number
     id_set_path = upload_config.id_set_path
     packs_dependencies_mapping = load_json(upload_config.pack_dependencies) if upload_config.pack_dependencies else {}
+    print_error(f'depencencies are: {packs_dependencies_mapping}')
     storage_base_path = upload_config.storage_base_path
     is_private_build = upload_config.is_private
 
