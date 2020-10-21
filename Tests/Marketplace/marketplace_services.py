@@ -1179,7 +1179,8 @@ class Pack(object):
                                                              user_metadata.get('dependencies', {}),
                                                              user_metadata.get('displayedImages', []))
 
-            print_error(f"dependencies_data is: {dependencies_data}")
+            print_error(
+                f'\n\n\nEND dependencies_data is: {json.dumps(dependencies_data, indent=4, sort_keys=True)}\n\n\n')
 
             if packs_statistic_df is not None:
                 self.downloads_count = self._get_downloads_count(packs_statistic_df)
@@ -1198,7 +1199,8 @@ class Pack(object):
             with open(metadata_path, "w") as metadata_file:
                 print_error(f"formatted metadata is: {formatted_metadata}")
                 json.dump(formatted_metadata, metadata_file, indent=4)  # writing back parsed metadata
-
+            print_error(
+                f'\n\n\nEND formatted_metadata is: {json.dumps(formatted_metadata, indent=4, sort_keys=True)}\n\n\n')
             print_color(f"Finished formatting {self._pack_name} packs's {Pack.METADATA} {metadata_path} file.",
                         LOG_COLORS.GREEN)
             task_status = True
