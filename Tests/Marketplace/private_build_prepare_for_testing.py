@@ -1,8 +1,11 @@
 import argparse
 import os
+import logging
 from Tests.Marketplace.marketplace_services import GCPConfig, init_storage_client, Pack
 from Tests.Marketplace.upload_packs_private import extract_packs_artifacts
 from demisto_sdk.commands.common.tools import str2bool
+
+from Tests.scripts.utils.log_util import install_logging
 
 
 def option_handler():
@@ -54,6 +57,7 @@ def upload_premium_pack_to_private_testing_bucket(premium_pack, private_testing_
 
 
 def main():
+    install_logging('Prepare Content Packs For Testing.log')
     packs_dir = '/home/runner/work/content-private/content-private/content/artifacts/packs'
     temp_dir = '/home/runner/work/content-private/content-private/content/temp-dir'
     if not os.path.exists(packs_dir):
