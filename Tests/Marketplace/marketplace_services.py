@@ -860,6 +860,7 @@ class Pack(object):
                 changelog_index_path = os.path.join(index_folder_path, self._pack_name, Pack.CHANGELOG_JSON)
                 with open(changelog_index_path, "r") as changelog_file:
                     changelog = json.load(changelog_file)
+                    print(f'CHNAGELOGGGGGG: \n{changelog}')
 
                 release_notes_dir = os.path.join(self._pack_path, Pack.RELEASE_NOTES)
 
