@@ -737,6 +737,7 @@ class Pack(object):
         finally:
             return task_status, zip_pack_path
 
+
     def detect_modified(self, content_repo, index_folder_path, current_commit_hash, remote_previous_commit_hash):
         """ Detects pack modified files.
 
