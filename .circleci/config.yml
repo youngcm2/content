@@ -601,10 +601,6 @@ jobs:
               - << pipeline.parameters.nightly >>
               - << pipeline.parameters.non_ami_run >>
           steps:
-            - *attach_workspace
-            - *restore_cache
-            - *add_ssh_keys
-            - *prepare_environment
             - run:
                 name: Wait until server ready
                 shell: /bin/bash
@@ -616,8 +612,6 @@ jobs:
                 shell: /bin/bash
                 when: always
                 command: |
-                  echo 'export INSTANCE_ROLE="Demisto GA"' >> $BASH_ENV
-                  source $BASH_ENV
                   export TEMP=$(cat ./Tests/filter_envs.json | jq '."Demisto GA"')
                   echo "Demisto GA filter=$TEMP"
                   if [[ "$TEMP" == "false" ]];
@@ -1031,6 +1025,11 @@ workflows:
     jobs:
       - Setup Environment
       - Create Instances:
+          pre-steps:
+            - checkout
+            - *restore_cache
+            - *add_ssh_keys
+            - *prepare_environment
           filters:
             branches:
               ignore: /pull\/[0-9]+/
@@ -1046,7 +1045,15 @@ workflows:
               ignore: /pull\/[0-9]+/
           requires:
             - Create Instances
+          pre-steps:
+            - *attach_workspace
+            - *add_ssh_keys
+            - *prepare_environment
       - Server 5_5:
+          pre-steps:
+            - *attach_workspace
+            - *add_ssh_keys
+            - *prepare_environment
           filters:
             branches:
               ignore: /pull\/[0-9]+/
@@ -1058,6 +1065,10 @@ workflows:
               ignore: /pull\/[0-9]+/
           requires:
             - Create Instances
+          pre-steps:
+            - *attach_workspace
+            - *add_ssh_keys
+            - *prepare_environment
       - Server Master:
           filters:
             branches:
